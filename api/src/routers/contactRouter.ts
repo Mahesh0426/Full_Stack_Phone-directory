@@ -1,24 +1,30 @@
-import { Router, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { apiResponse } from "../interface/apiResponse";
 import Contact, { IContact } from "../schema/contactModel";
+
 import { isValidObjectId } from "mongoose";
 
-const contactRouter = Router();
+const contactRouter = express.Router();
 // Create a new contact
 contactRouter.post("/", async (req: Request, res: Response) => {
   try {
-    // Create a new instance of Contact with the request body
-    const newContact = new Contact(req.body);
+    const newContact: IContact = new Contact(req.body);
+    console.log("newcontact:", newContact);
+    console.log("req.body:", req.body);
 
-    // Save the new contact to the database
-    const savedContact: IContact = await newContact.save();
-
+    if (!newContact.name || !newContact.phone) {
+      throw new Error("Name and phone are required");
+    }
+    await newContact.save();
     const responseObj: apiResponse = {
       status: true,
       message: "Contact created successfully",
-      data: savedContact,
+      data: newContact,
     };
+    console.log("responseObj:", responseObj);
+
     res.status(201).json(responseObj);
+    return;
   } catch (error) {
     console.error("Error in POST /contacts:", error);
     const errorObj: apiResponse = {
@@ -39,6 +45,7 @@ contactRouter.get("/", async (req: Request, res: Response) => {
       data: contacts,
     };
     res.status(200).json(responseObj);
+    return;
   } catch (error) {
     console.error("Error in GET /contacts:", error);
     const errorObj: apiResponse = {

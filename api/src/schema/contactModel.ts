@@ -7,7 +7,7 @@ export interface IContact extends Document {
 
 const contactSchema: Schema = new Schema({
   name: { type: String, required: true },
-  phone: { type: Number, required: true, length: 10 },
+  phone: { type: Number, required: true },
 });
 
 export default mongoose.model<IContact>("Contact", contactSchema);
