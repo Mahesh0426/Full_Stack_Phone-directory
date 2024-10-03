@@ -87,15 +87,6 @@ contactRouter.get("/:id", async (req: Request, res: Response) => {
 // Delete contact by ID
 contactRouter.delete("/:id", async (req: Request, res: Response) => {
   try {
-    if (!isValidObjectId(req.params.id)) {
-      const errorObj: apiResponse = {
-        status: false,
-        message: "Invalid contact ID",
-      };
-      res.status(400).json(errorObj);
-      return;
-    }
-
     const contact: IContact | null = await Contact.findByIdAndDelete(
       req.params.id
     );
@@ -116,7 +107,7 @@ contactRouter.delete("/:id", async (req: Request, res: Response) => {
     };
     res.status(200).json(responseObj);
   } catch (error) {
-    console.error("Error in DELETE /contact/:id:", error);
+    console.error("Error in DELETE /contacts/:id:", error);
     const errorObj: apiResponse = {
       status: false,
       message: "Network error",
@@ -126,7 +117,7 @@ contactRouter.delete("/:id", async (req: Request, res: Response) => {
 });
 
 // Update contact by ID
-contactRouter.put("/:id", async (req: Request, res: Response) => {
+contactRouter.patch("/:id", async (req: Request, res: Response) => {
   try {
     if (!isValidObjectId(req.params.id)) {
       const errorObj: apiResponse = {

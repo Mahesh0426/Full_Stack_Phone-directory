@@ -1,14 +1,17 @@
 import axios from "axios";
-import ContactLIst from "./ContactList";
+import ContactList from "./ContactList";
 import DirectoryForm from "./Directory-Form";
-import { getContactsResponse } from "../interface/ApiResponse";
+import {
+  createContactResponse,
+  getContactsResponse,
+} from "../interface/ApiResponse";
 import { useEffect, useState } from "react";
 import { Contact } from "../interface/contacts";
 
-const Directory: React.FC = () => {
+const Directory = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
 
-  //  fetch contacts from API
+  // Fetch contacts from API
   const fetchContact = async () => {
     const response = await axios.get<getContactsResponse>(
       "http://localhost:8000/api/contacts"
@@ -22,24 +25,33 @@ const Directory: React.FC = () => {
     fetchContact();
   }, []);
 
-  // functio to handle add user
+  // Function to handle add user
   const handleAddUser = async (name: string, phone: number) => {
     const newContact: Contact = {
       name,
       phone,
     };
-    const response = await axios.post(
+    const response = await axios.post<createContactResponse>(
       "http://localhost:8000/api/contacts",
       newContact
     );
-    ``;
     console.log("response", response.data.data);
 
     setContacts((prevContact) => [...prevContact, response.data.data]);
-    //clear input
-    setName("");
-    setPhone(0);
   };
+
+  //to save in local storage
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
+  //to fetch from local storage
+  useEffect(() => {
+    const localContacts = JSON.parse(localStorage.getItem("contacts") || "[]");
+    if (contacts && contacts.length > 0) {
+      setContacts(localContacts);
+    }
+  }, []);
 
   return (
     <div className="directory-container">
@@ -52,13 +64,14 @@ const Directory: React.FC = () => {
         Phone Directory
       </h1>
       <h2>
-        Contact Counter: <span id="conntact-counter">{}</span>
+        Contact Counter: <span id="contact-counter">{contacts.length}</span>
       </h2>
-      {/* form here  */}
+      {/* Form here */}
       <DirectoryForm handleAddUser={handleAddUser} />
-      {/* contact list here */}
-      <ContactLIst contacts={contacts} />
+      {/* Contact list here */}
+      <ContactList contacts={contacts} fetchContact={fetchContact} />
     </div>
   );
 };
+
 export default Directory;

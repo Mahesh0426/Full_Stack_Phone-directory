@@ -195,4 +195,26 @@ body {
     padding: 5px 15px;
     cursor: pointer;
   }
+  button.edit {
+    margin-left: 10px;
+    background: #3d43b5;
+    color: white;
+    border: 0px;
+    border-radius: 10px;
+    padding: 5px 15px;
+    cursor: pointer;
+  }
+}
+
+/* edit  */
+.input-no-border {
+  border: transparent;
+  outline: none;
+  background-color: transparent;
+}
+
+.input-no-border:focus {
+  border: none;
+  outline: none;
+  background-color: transparent;
 }

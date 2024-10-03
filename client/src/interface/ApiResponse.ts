@@ -11,3 +11,10 @@ export interface createContactResponse {
   message: string;
   data: Contact;
 }
+
+// delete a contact
+export interface deleteContactResponse {
+  status: boolean;
+  message: string;
+  data: Contact;
+}

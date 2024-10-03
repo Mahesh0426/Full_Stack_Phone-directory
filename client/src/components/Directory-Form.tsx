@@ -9,7 +9,7 @@ const DirectoryForm: React.FC<DirectoryFormProps> = (props) => {
 
   // State for form inputs
   const [name, setName] = useState<string>("");
-  const [phone, setPhone] = useState<number>(0);
+  const [phone, setPhone] = useState<number>();
 
   // Handle form submission event
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
